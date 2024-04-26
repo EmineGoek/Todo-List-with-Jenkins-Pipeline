@@ -16,7 +16,7 @@ variable "key" {
 }
 
 variable "user" {
-  default = "himmel"
+  default = "techpro"
 }
 
 resource "aws_instance" "managed_nodes" {
