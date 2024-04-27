@@ -62,9 +62,19 @@
       shell: |
           curl -SL https://github.com/docker/compose/releases/download/v2.24.7/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
           chmod +x /usr/local/bin/docker-compose
+    
 
     - name: log in to AWS ec2-user
       ansible.builtin.shell: |
         export PATH=/usr/local/bin:$PATH
         source ~/.bash_profile
         aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ ecr_registry }}   
+
+    - name: Copy docker-compose.yml to the server
+      copy:
+        src: "{{ compose_dir }}/docker-compose.yml"
+        dest: /home/ec2-user/docker-compose.yml
+    - name: Start Docker Compose
+      command: docker-compose up -d
+      args:
+        chdir: /home/ec2-user/
